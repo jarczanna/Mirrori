@@ -1,0 +1,5 @@
+streamlit
+supabase
+anthropic
+Pillow
+python-dotenv
