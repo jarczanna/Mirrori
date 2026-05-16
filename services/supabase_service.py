@@ -132,6 +132,7 @@ def add_style_case(analysis_id: str, analysis_json: dict) -> dict:
     return result.data[0] if result.data else None
 
 def get_similar_cases(body_type: str, style_tags: list, limit: int = 5) -> list:
+    """body_type: A | H | X | V | O"""
     sb = get_client()
     result = (
         sb.table("style_cases")
