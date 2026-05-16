@@ -83,17 +83,11 @@ with tab1:
                             st.markdown(f"**Typ sylwetki:** {ai_json.get('typ_sylwetki', '—')}")
                             st.markdown(f"**Kolorystyka:** {ai_json.get('kolorystyka', '—')}")
                             st.markdown(f"**Podton:** {ai_json.get('podton_skory', '—')}")
+                        with col_b:
                             prop = ai_json.get("proporcje", {})
                             st.markdown(f"**Ramiona:** {prop.get('ramiona', '—')}")
                             st.markdown(f"**Talia:** {prop.get('talia', '—')}")
-                            st.markdown(f"**Biodra:** {prop.get('biodra', '—')}")
-                        with col_b:
-                            st.markdown("**Rekomendacje:**")
-                            for r in ai_json.get("rekomendacje_ogolne", []):
-                                st.markdown(f"✓ {r}")
-                            st.markdown("**Czego unikać:**")
-                            for u in ai_json.get("czego_unikac", []):
-                                st.markdown(f"✗ {u}")
+                            st.markdown(f"**Biodra:** {prop.get('biodra', '—")}")
 
                         pewnosc = ai_json.get("pewnosc_analizy", "—")
                         kolor = "🟢" if pewnosc == "wysoka" else "🟡" if pewnosc == "srednia" else "🔴"
@@ -108,27 +102,32 @@ with tab1:
                 st.markdown("---")
                 st.markdown("**Twoja decyzja**")
 
-                action = st.radio(
-                    "Co chcesz zrobić?",
-                    ["Zatwierdź analizę AI bez zmian", "Popraw analizę przed zatwierdzeniem"],
-                    key=f"action_{analysis['id']}"
+                TYPY_SYLWETKI = {
+                    "A — trójkąt (węższe ramiona, szersze biodra)": "A",
+                    "H — prostokąt (ramiona i biodra podobnej szerokości)": "H",
+                    "X — klepsydra (ramiona i biodra podobne, zaznaczona talia)": "X",
+                    "V — odwrócony trójkąt (szersze ramiona, węższe biodra)": "V",
+                    "O — owal (zaokrąglona sylwetka)": "O",
+                }
+
+                ai_typ = ai_json.get("typ_sylwetki", "A") if ai_json else "A"
+                ai_pewnosc = ai_json.get("pewnosc_typu", 0) if ai_json else 0
+
+                # Znajdź domyślny wybór na podstawie wyniku AI
+                domyslny = next(
+                    (k for k, v in TYPY_SYLWETKI.items() if v == ai_typ),
+                    list(TYPY_SYLWETKI.keys())[0]
                 )
 
-                korekta_json = None
-                if action == "Popraw analizę przed zatwierdzeniem" and ai_json:
-                    st.markdown("Edytuj JSON analizy:")
-                    edited = st.text_area(
-                        "JSON do edycji",
-                        value=json.dumps(ai_json, ensure_ascii=False, indent=2),
-                        height=300,
-                        key=f"edit_{analysis['id']}"
-                    )
-                    try:
-                        korekta_json = json.loads(edited)
-                        st.success("JSON poprawny ✓")
-                    except json.JSONDecodeError as e:
-                        st.error(f"Błąd w JSON: {e}")
-                        korekta_json = None
+                st.caption(f"AI zaproponowało: **{ai_typ}** z pewnością **{ai_pewnosc}%**")
+
+                wybrany_label = st.selectbox(
+                    "Typ sylwetki (zatwierdź lub zmień):",
+                    options=list(TYPY_SYLWETKI.keys()),
+                    index=list(TYPY_SYLWETKI.keys()).index(domyslny),
+                    key=f"typ_{analysis['id']}"
+                )
+                wybrany_typ = TYPY_SYLWETKI[wybrany_label]
 
                 komentarz = st.text_input(
                     "Komentarz dla użytkowniczki (opcjonalnie)",
@@ -136,24 +135,34 @@ with tab1:
                     key=f"comment_{analysis['id']}"
                 )
 
+                # Buduj korektę tylko jeśli zmieniono typ
+                def build_korekta():
+                    if not ai_json:
+                        return None
+                    if wybrany_typ != ai_typ:
+                        korekta = dict(ai_json)
+                        korekta["typ_sylwetki"] = wybrany_typ
+                        return korekta
+                    return None
+
                 col_btn1, col_btn2 = st.columns([1, 4])
                 with col_btn1:
                     if st.button("✅ Zatwierdź", key=f"approve_{analysis['id']}", type="primary"):
-                        if action == "Popraw analizę przed zatwierdzeniem" and not korekta_json:
-                            st.error("Popraw błędy w JSON przed zatwierdzeniem.")
-                        else:
-                            db.approve_analysis(
-                                analysis_id=analysis["id"],
-                                korekta=korekta_json,
-                                komentarz=komentarz or None
-                            )
-                            # Dodaj do bazy RAG
-                            final = korekta_json or ai_json
-                            if final and "typ_sylwetki" in final:
-                                db.add_style_case(analysis["id"], final)
-
-                            st.success("Zatwierdzono! Użytkowniczka zobaczy wynik.")
-                            st.rerun()
+                        korekta_json = build_korekta()
+                        db.approve_analysis(
+                            analysis_id=analysis["id"],
+                            korekta=korekta_json,
+                            komentarz=komentarz or None
+                        )
+                        final = korekta_json or ai_json
+                        if final and "typ_sylwetki" in final:
+                            db.add_style_case(analysis["id"], final)
+                        # Usuń zdjęcie z Storage po zatwierdzeniu (RODO)
+                        user_id = analysis.get("user_id")
+                        if user_id:
+                            db.delete_sylwetka(user_id)
+                        st.success("Zatwierdzono! Użytkowniczka zobaczy wynik.")
+                        st.rerun()
 
 # ─── TAB 2: ZATWIERDZONE ─────────────────────
 
