@@ -28,7 +28,7 @@ TOOLS = [
                     "body_type": {
                         "type": "string",
                         "description": "Typ sylwetki np. gruszka, klepsydra, prostokatna",
-                        "enum": ["gruszka", "klepsydra", "prostokatna", "trojkat_odwrocony", "okragla"]
+                        "enum": ["A", "H", "X", "V", "O"]
                     },
                     "style_tags": {
                         "type": "array",
