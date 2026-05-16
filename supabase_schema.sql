@@ -1,8 +1,3 @@
--- ============================================
--- SCHEMAT BAZY DANYCH — Stylizacja MVP
--- Wklej całość w Supabase SQL Editor i uruchom
--- ============================================
-
 -- TABELA: users
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -89,12 +84,3 @@ CREATE TRIGGER trigger_users_updated_at
 CREATE TRIGGER trigger_analyses_updated_at
     BEFORE UPDATE ON analyses
     FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
--- ============================================
--- STORAGE BUCKET (uruchom osobno w Supabase)
--- ============================================
--- W Supabase Dashboard → Storage → New Bucket
--- Nazwa: sylwetki
--- Public: NIE (private)
--- Nazwa: szafa
--- Public: NIE (private)
