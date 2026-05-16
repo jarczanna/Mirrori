@@ -1,19 +1,24 @@
 import streamlit as st
 
-st.set_page_config(page_title="Mirrori", page_icon="🪞")
+st.set_page_config(
+    page_title="Mirrori - Stylizacja AI",
+    page_icon="👗",
+    layout="centered",
+    initial_sidebar_state="collapsed"
+)
 
-page = st.sidebar.selectbox("Widok", ["Użytkowniczka", "Stylistka"])
+st.markdown("## 👗 Stylizacja AI")
+st.markdown("Twoja osobista stylistka — zatwierdzona przez człowieka.")
+st.markdown("---")
 
-if page == "Użytkowniczka":
-    st.title("🪞 Mirrori")
-    st.write("Analiza sylwetki")
-    
-    uploaded_file = st.file_uploader("Wgraj zdjęcie sylwetki (bez twarzy)", type=["jpg", "jpeg", "png"])
-    
-    if uploaded_file:
-        st.image(uploaded_file, width=300)
-        st.success("Zdjęcie wgrane!")
+col1, col2 = st.columns(2)
 
-elif page == "Stylistka":
-    st.title("Panel stylistki")
-    st.write("Tu będzie kolejka do weryfikacji")
+with col1:
+    st.markdown("### Jestem klientką")
+    st.markdown("Chcę poznać swój styl i otrzymać rekomendacje.")
+    st.page_link("pages/1_user.py", label="Zacznij tutaj →", icon="👗")
+
+with col2:
+    st.markdown("### Jestem stylistką")
+    st.markdown("Chcę przejrzeć i zatwierdzić analizy użytkowniczek.")
+    st.page_link("pages/2_stylistka.py", label="Panel stylistki →", icon="🪡")
