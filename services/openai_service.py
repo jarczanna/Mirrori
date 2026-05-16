@@ -27,7 +27,7 @@ TOOLS = [
                 "properties": {
                     "body_type": {
                         "type": "string",
-                        "description": "Typ sylwetki np. gruszka, klepsydra, prostokatna",
+                        "description": "Typ sylwetki: A (trójkąt), H (prostokąt), X (klepsydra), V (odwrócony trójkąt), O (owal)",
                         "enum": ["A", "H", "X", "V", "O"]
                     },
                     "style_tags": {
