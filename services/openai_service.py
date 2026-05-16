@@ -69,7 +69,7 @@ def analyze_sylwetka(photo_url: str, ankieta: dict) -> dict:
                     "type": "image_url",
                     "image_url": {
                         "url": photo_url,
-                        "detail": "high"
+                        "detail": "low"
                     }
                 }
             ]
@@ -82,7 +82,7 @@ def analyze_sylwetka(photo_url: str, ankieta: dict) -> dict:
         messages=messages,
         tools=TOOLS,
         tool_choice="auto",
-        max_tokens=1500,
+        max_tokens=400,
         temperature=0.3
     )
 
