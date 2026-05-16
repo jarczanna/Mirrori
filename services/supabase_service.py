@@ -92,7 +92,7 @@ def get_wardrobe_count(user_id: str) -> int:
 def add_wardrobe_item(user_id: str, zdjecie_url: str, opis: str, kategoria: str, kolor: str, plan: str) -> dict | None:
     limit = 12 if plan == "essential" else None
     if limit and get_wardrobe_count(user_id) >= limit:
-        return None  # limit osiągnięty
+        return None
     sb = get_client()
     result = sb.table("wardrobe").insert({
         "user_id": user_id,
@@ -147,7 +147,18 @@ def get_similar_cases(body_type: str, style_tags: list, limit: int = 5) -> list:
 
 def upload_photo(bucket: str, path: str, file_bytes: bytes, content_type: str = "image/jpeg") -> str:
     sb = get_service_client()
-    sb.storage.from_(bucket).upload(path, file_bytes, {"content-type": content_type})
+    try:
+        sb.storage.from_(bucket).upload(
+            path,
+            file_bytes,
+            {"content-type": content_type, "upsert": "true"}
+        )
+    except Exception:
+        sb.storage.from_(bucket).update(
+            path,
+            file_bytes,
+            {"content-type": content_type}
+        )
     result = sb.storage.from_(bucket).get_public_url(path)
     return result
 
