@@ -190,3 +190,14 @@ def get_user_stylizations(user_id: str, typ: str = None) -> list:
         query = query.eq("typ", typ)
     result = query.order("created_at", desc=True).execute()
     return result.data or []
+
+def delete_photo(bucket: str, path: str) -> None:
+    sb = get_service_client()
+    try:
+        sb.storage.from_(bucket).remove([path])
+    except Exception:
+        pass  # jeśli już nie istnieje — ignoruj
+
+def delete_sylwetka(user_id: str) -> None:
+    path = f"{user_id}/sylwetka.jpg"
+    delete_photo("sylwetki", path)
