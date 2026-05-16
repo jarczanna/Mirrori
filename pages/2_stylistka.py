@@ -87,7 +87,7 @@ with tab1:
                             prop = ai_json.get("proporcje", {})
                             st.markdown(f"**Ramiona:** {prop.get('ramiona', '—')}")
                             st.markdown(f"**Talia:** {prop.get('talia', '—')}")
-                            st.markdown(f"**Biodra:** {prop.get('biodra', '—")}")
+                            st.markdown(f"**Biodra:** {prop.get('biodra', '—')}")
 
                         pewnosc = ai_json.get("pewnosc_analizy", "—")
                         kolor = "🟢" if pewnosc == "wysoka" else "🟡" if pewnosc == "srednia" else "🔴"
