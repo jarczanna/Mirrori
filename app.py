@@ -4,7 +4,7 @@ st.set_page_config(
     page_title="Stylizacja AI",
     page_icon="👗",
     layout="centered",
-    initial_sidebar_ebar_state="collapsed"
+    initial_sidebar_state="collapsed"
 )
 
 st.markdown("## 👗 Stylizacja AI")
