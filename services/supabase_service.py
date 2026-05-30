@@ -81,7 +81,11 @@ def get_user_analysis(user_id: str) -> dict:
         .execute()
     )
     return result.data[0] if result.data else None
-
+    
+def get_signed_url(photo_path: str) -> str:
+    sb = get_service_client()
+    result = sb.storage.from_("sylwetki").create_signed_url(photo_path, 60)
+    return result["signedURL"]
 # ─── WARDROBE ────────────────────────────────
 
 def get_wardrobe_count(user_id: str) -> int:
