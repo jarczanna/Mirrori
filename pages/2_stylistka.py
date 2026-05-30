@@ -55,9 +55,13 @@ with tab1:
 
                 # Zdjęcie sylwetki
                 with col_photo:
-                    photo_url = analysis.get("photo_url")
-                    if photo_url:
-                        st.image(photo_url, caption="Zdjęcie sylwetki", width=280)
+                    photo_path = analysis.get("photo_url")
+                    if photo_path:
+                        try:
+                            signed = supabase.storage.from_("temp_images").create_signed_url(photo_path, 60)
+                            st.image(signed["signedURL"], caption="Zdjęcie sylwetki", width=280)
+                        except:
+                            st.warning("Nie udało się załadować zdjęcia")
                     else:
                         st.warning("Brak zdjęcia")
 
