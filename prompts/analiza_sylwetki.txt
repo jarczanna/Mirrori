@@ -6,7 +6,7 @@ Na podstawie zdjęcia i ankiety zwróć WYŁĄCZNIE obiekt JSON (bez żadnego do
  
 {
   "typ_sylwetki": "jedna z wartości: A | H | X | V | O",
-  "pewnosc_typu": 85,
+  "pewnosc_analizy": przykładowo 85,
   "kolorystyka": "jedna z wartości: ciepla | chlodna | neutralna",
   "podton_skory": "jedna z wartości: zloty | rozowy | oliwkowy | neutralny",
   "proporcje": {
