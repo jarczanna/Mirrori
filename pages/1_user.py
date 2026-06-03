@@ -134,6 +134,7 @@ def step_zdjecie():
             with st.spinner("Tworzę analizę AI..."):
                 ankieta = st.session_state.get("ankieta", {})
                 analysis = db.create_analysis(user_id, photo_url, ankieta)
+                signed_url = db.get_signed_url(photo_url)
                 ai_result = ai.analyze_sylwetka(photo_url, ankieta)
 
                 if "error" in ai_result:
