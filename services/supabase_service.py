@@ -60,13 +60,15 @@ def get_pending_analyses() -> list:
     )
     return result.data or []
 
-def approve_analysis(analysis_id: str, korekta: dict = None, komentarz: str = None) -> None:
+def approve_analysis(analysis_id: str, korekta: dict = None, komentarz: str = None, uzasadnienie: str = None) -> None:
     sb = get_service_client()
     update_data = {"status": "approved" if not korekta else "corrected"}
     if korekta:
         update_data["stylistka_korekta"] = korekta
     if komentarz:
         update_data["stylistka_komentarz"] = komentarz
+    if uzasadnienie:
+        update_data["stylistka_uzasadnienie"] = uzasadnienie
     sb.table("analyses").update(update_data).eq("id", analysis_id).execute()
 
 def get_user_analysis(user_id: str) -> dict:
