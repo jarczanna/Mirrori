@@ -84,6 +84,8 @@ def get_user_analysis(user_id: str) -> dict:
     
 def get_signed_url(photo_path: str) -> str:
     sb = get_service_client()
+    if "storage/v1/object/public/sylwetki/" in photo_path:
+        photo_path = photo_path.split("storage/v1/object/public/sylwetki/")[1]
     result = sb.storage.from_("sylwetki").create_signed_url(photo_path, 60)
     return result["signedURL"]
 # ─── WARDROBE ────────────────────────────────
