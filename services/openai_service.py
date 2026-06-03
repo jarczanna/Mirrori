@@ -140,3 +140,79 @@ def quick_text(system_prompt: str, user_message: str, max_tokens: int = 800) -> 
         temperature=0.5
     )
     return response.choices[0].message.content.strip()
+    
+    #funkcja wyślij zdjęcie jako base64 bezpośrednio z pamięci.
+
+def analyze_sylwetka_b64(image_b64: str, ankieta: dict) -> dict:
+    prompt_template = load_prompt("analiza_sylwetki")
+    prompt = prompt_template.replace("{ankieta}", json.dumps(ankieta, ensure_ascii=False, indent=2))
+
+    messages = [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt},
+                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}", "detail": "low"}}
+            ]
+        }
+    ]
+
+    response = client.chat.completions.create(
+        model=MODEL,
+        messages=messages,
+        max_tokens=500,
+        temperature=0.3
+    )
+
+    raw = response.choices[0].message.content.strip()
+    if raw.startswith("```"):
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+    raw = raw.strip()
+
+    try:
+        result = json.loads(raw)
+    except json.JSONDecodeError:
+        return {"error": "Nie udało się sparsować odpowiedzi AI", "raw": raw}
+
+    pewnosc = result.get("pewnosc_typu", 0)
+    if pewnosc < 60:
+        typ = result.get("typ_sylwetki", "H")
+        cases = get_similar_cases(body_type=typ, style_tags=result.get("tagi", []))
+
+        if cases:
+            rag_prompt = (
+                f"Twoja wstępna analiza dała typ {typ} z pewnością {pewnosc}%.\n\n"
+                f"Oto zweryfikowane przez stylistkę przypadki podobnych sylwetek:\n"
+                f"{json.dumps(cases, ensure_ascii=False, indent=2)}\n\n"
+                f"Na podstawie tych przypadków i zdjęcia, dokonaj ponownej analizy. "
+                f"Zwróć WYŁĄCZNIE obiekt JSON w tym samym formacie co wcześniej."
+            )
+
+            messages.append({"role": "assistant", "content": response.choices[0].message.content})
+            messages.append({"role": "user", "content": rag_prompt})
+
+            response2 = client.chat.completions.create(
+                model=MODEL,
+                messages=messages,
+                max_tokens=500,
+                temperature=0.3
+            )
+
+            raw2 = response2.choices[0].message.content.strip()
+            if raw2.startswith("```"):
+                raw2 = raw2.split("```")[1]
+                if raw2.startswith("json"):
+                    raw2 = raw2[4:]
+            raw2 = raw2.strip()
+
+            try:
+                result = json.loads(raw2)
+                result["rag_wykorzystany"] = True
+            except json.JSONDecodeError:
+                pass
+    else:
+        result["rag_wykorzystany"] = False
+
+    return result
