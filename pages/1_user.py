@@ -129,7 +129,7 @@ def step_zdjecie():
             with st.spinner("Przesyłam zdjęcie..."):
                 file_bytes = uploaded.read()
                 user_id = st.session_state.user["id"]
-                photo_url = db.upload_temp_images(user_id, file_bytes)
+                photo_url = db.upload_sylwetka(user_id, file_bytes)
 
             with st.spinner("Tworzę analizę AI..."):
                 ankieta = st.session_state.get("ankieta", {})
