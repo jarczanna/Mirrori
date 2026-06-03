@@ -94,7 +94,7 @@ with tab1:
                             st.markdown(f"**Biodra:** {prop.get('biodra', '—')}")
                             st.markdown(f"**Biodra:** {prop.get('biodra', '—')}")
 
-                        pewnosc = ai_json.get("pewnosc_analizy", "—")
+                        pewnosc = ai_json.get("pewnosc_typu", "—")
                         kolor = "🟢" if pewnosc == "wysoka" else "🟡" if pewnosc == "srednia" else "🔴"
                         st.caption(f"{kolor} Pewność analizy AI: **{pewnosc}**")
 
