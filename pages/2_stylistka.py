@@ -140,6 +140,12 @@ with tab1:
                     key=f"comment_{analysis['id']}"
                 )
 
+                uzasadnienie = st.text_area(
+                "Uzasadnienie decyzji (wymagane przy korekcie)",
+                placeholder="Np. Biodra są wyraźnie szersze niż ramiona, co wskazuje na typ A, nie H...",
+                key=f"uzasadnienie_{analysis['id']}"
+)
+
                 # Buduj korektę tylko jeśli zmieniono typ
                 def build_korekta():
                     if not ai_json:
@@ -150,24 +156,24 @@ with tab1:
                         return korekta
                     return None
 
-                col_btn1, col_btn2 = st.columns([1, 4])
+                col_btn1, col_btn2 = st.columns([2, 3])
                 with col_btn1:
                     if st.button("✅ Zatwierdź", key=f"approve_{analysis['id']}", type="primary"):
                         korekta_json = build_korekta()
-                        db.approve_analysis(
-                            analysis_id=analysis["id"],
-                            korekta=korekta_json,
-                            komentarz=komentarz or None
-                        )
-                        final = korekta_json or ai_json
-                        if final and "typ_sylwetki" in final:
-                            db.add_style_case(analysis["id"], final)
-                        # Usuń zdjęcie z Storage po zatwierdzeniu (RODO)
-                        user_id = analysis.get("user_id")
-                        if user_id:
-                            db.delete_sylwetka(user_id)
-                        st.success("Zatwierdzono! Użytkowniczka zobaczy wynik.")
-                        st.rerun()
+                        if korekta_json and not uzasadnienie:
+                            st.error("Przy korekcie uzasadnienie jest wymagane!")
+                        else:
+                            db.approve_analysis(
+                                analysis_id=analysis["id"],
+                                korekta=korekta_json,
+                                komentarz=komentarz or None,
+                                uzasadnienie=uzasadnienie or None
+                            )
+                            final = korekta_json or ai_json
+                            if final and "typ_sylwetki" in final:
+                                db.add_style_case(analysis["id"], final)
+                            st.success("Zatwierdzono!")
+                            st.rerun()
 
 # ─── TAB 2: ZATWIERDZONE ─────────────────────
 
