@@ -67,7 +67,7 @@ with tab1:
 
                 # Dane z ankiety i analiza AI
                 with col_data:
-                    st.markdown("**Ankieta użytkowniczki**")
+                    st.markdown("**Ankieta użytkownika**")
                     ankieta = analysis.get("ankieta_json", {})
                     if ankieta:
                         st.markdown(f"- **Motywacja:** {ankieta.get('motywacja', '—')}")
