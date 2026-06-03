@@ -54,12 +54,16 @@ with tab1:
                 col_photo, col_data = st.columns([1, 2])
 
                 # Zdjęcie sylwetki
-                with col_photo:
-                    photo_url = analysis.get("photo_url")
-                    if photo_url:
-                        st.image(photo_url, caption="Zdjęcie sylwetki", width=280)
-                    else:
-                        st.warning("Brak zdjęcia")
+            with col_photo:
+                photo_path = analysis.get("photo_url")
+                if photo_path:
+                    try:
+                        signed = db.get_signed_url(photo_path)
+                        st.image(signed, caption="Zdjęcie sylwetki", width=280)
+                    except Exception as e:
+                        st.error(f"Błąd: {e}")
+                else:
+                    st.warning("Brak zdjęcia")
 
                 # Dane z ankiety i analiza AI
                 with col_data:
