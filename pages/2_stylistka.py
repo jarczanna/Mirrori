@@ -92,7 +92,6 @@ with tab1:
                             st.markdown(f"**Ramiona:** {prop.get('ramiona', '—')}")
                             st.markdown(f"**Talia:** {prop.get('talia', '—')}")
                             st.markdown(f"**Biodra:** {prop.get('biodra', '—')}")
-                            st.markdown(f"**Biodra:** {prop.get('biodra', '—')}")
 
                         pewnosc = ai_json.get("pewnosc_typu") or ai_json.get("pewnosc_analizy", "—")
                         if isinstance(pewnosc, (int, float)):
