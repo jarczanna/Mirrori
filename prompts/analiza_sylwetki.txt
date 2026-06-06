@@ -15,7 +15,7 @@ Na podstawie zdjęcia i ankiety zwróć WYŁĄCZNIE obiekt JSON (bez żadnego do
     "biodra": "waskie | srednie | szerokie"
   },
   "tagi": ["tag1", "tag2", "tag3"],
-  "uwagi": "opcjonalne uwagi jeśli zdjęcie jest niewyraźne lub trudne do analizy"
+  "uwagi": "opcjonalne uwagi jeśli zdjęcie jest niewyraźne lub trudne do analizy. Pole "uwagi" służy WYŁĄCZNIE do komentarzy o jakości zdjęcia (np. niewyraźne, zły kąt, luźna odzież, złe oświetlenie, tło zbyt ciemne). NIE pisz tam nic o zatwierdzeniu przez stylistkę — to nie Twoja rola."
 }
  
 Objaśnienie typów sylwetki:
@@ -25,7 +25,7 @@ Objaśnienie typów sylwetki:
 - V = odwrócony trójkąt: szersze ramiona, węższe biodra
 - O = owal: zaokrąglona sylwetka, pełniejszy brzuch
  
-Pole "pewnosc_typu" to liczba całkowita od 0 do 100 oznaczająca pewność co do określonego typu sylwetki. Przykład: 90 = bardzo wysoka pewność, 60 = umiarkowana, 40 = niska (zdjęcie trudne do analizy).
+Pole "pewnosc_analizy" to liczba całkowita od 0 do 100 oznaczająca pewność co do określonego typu sylwetki. Przykład: 90 = bardzo wysoka pewność, 60 = umiarkowana, 40 = niska (zdjęcie trudne do analizy).
  
 Dane z ankiety użytkowniczki:
 {ankieta}
