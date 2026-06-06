@@ -38,6 +38,6 @@ Pole "pewnosc_analizy" to liczba całkowita od 0 do 100 oznaczająca pewność c
 ]
 Dane z ankiety użytkowniczki:
 {ankieta}
- 
+ Pole "plec" w ankiecie określa płeć użytkownika/użytkowniczki. Dostosuj rekomendacje ubraniowe do płci — nie proponuj sukienek mężczyznom ani garniturów kobietom (chyba że ankieta wskazuje inaczej, np uzytkowniczka zaznaczy że lubi styl oficjalny o wtedy można zaproponować kobiecie garnitur).
 Przeanalizuj zdjęcie i ankietę, a następnie zwróć JSON.
  
