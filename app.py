@@ -1,14 +1,14 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="Stylizacja AI",
+    page_title="Mirrori",
     page_icon="👗",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-st.markdown("## 👗 Stylizacja AI")
-st.markdown("Twoja osobista stylistka — zatwierdzona przez człowieka.")
+st.markdown("## 👗 Mirrori")
+st.markdown("Twój osobisty stylista - analiza AI, zatwierdzona przez człowieka.")
 st.markdown("---")
 
 col1, col2 = st.columns(2)
