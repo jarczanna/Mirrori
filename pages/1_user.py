@@ -120,7 +120,7 @@ def step_zdjecie():
         "- Zdjęcie z przodu"
     )
 
-    uploaded = st.file_uploader("Wybierz zdjęcie", type=["jpg", "jpeg", "png"])
+    uploaded = st.file_uploader("Wybierz zdjęcie", type=["jpg", "jpeg", "png", "webp"])
 
     if uploaded:
         st.image(uploaded, caption="Podgląd", width=300)
@@ -131,13 +131,13 @@ def step_zdjecie():
                 user_id = st.session_state.user["id"]
                 photo_url = db.upload_sylwetka(user_id, file_bytes)
 
-                with st.spinner("Tworzę analizę AI..."):
-                    ankieta = st.session_state.get("ankieta", {})
-                    analysis = db.create_analysis(user_id, photo_url, ankieta)
-                    import base64
-                    uploaded.seek(0)
-                    b64_image = base64.b64encode(uploaded.read()).decode("utf-8")
-                    ai_result = ai.analyze_sylwetka_b64(b64_image, ankieta)
+            with st.spinner("Tworzę analizę AI..."):
+                ankieta = st.session_state.get("ankieta", {})
+                analysis = db.create_analysis(user_id, photo_url, ankieta)
+                import base64
+                uploaded.seek(0)
+                b64_image = base64.b64encode(uploaded.read()).decode("utf-8")
+                ai_result = ai.analyze_sylwetka_b64(b64_image, ankieta)
 
                 if "error" in ai_result:
                     st.error(f"Błąd analizy AI: {ai_result.get('error')}")
@@ -198,15 +198,15 @@ def step_wynik():
         prop = final.get("proporcje", {})
         st.metric("Ramiona", prop.get("ramiona", "—").replace("_", " ").title())
 
-  if final.get("rekomendacje_ogolne"):
-    st.markdown("### Co Ci pasuje")
-    for r in final["rekomendacje_ogolne"]:
-        st.markdown(f"✓ {r}")
+    if final.get("rekomendacje_ogolne"):
+        st.markdown("### Co Ci pasuje")
+        for r in final["rekomendacje_ogolne"]:
+            st.markdown(f"✓ {r}")
 
-if final.get("czego_unikac"):
-    st.markdown("### Czego unikać")
-    for u in final["czego_unikac"]:
-        st.markdown(f"✗ {u}")
+    if final.get("czego_unikac"):
+        st.markdown("### Czego unikać")
+        for u in final["czego_unikac"]:
+            st.markdown(f"✗ {u}")
 
     if user["plan"] == "essential":
         st.markdown("---")
