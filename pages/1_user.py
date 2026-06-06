@@ -110,32 +110,32 @@ def step_ankieta():
         st.session_state.step = "zdjecie"
         st.rerun()
 #wrzucanie zdjecia
-    if st.button("Wyślij do analizy →"):
-        if not zgoda:
-            st.warning("Zaznacz zgodę żeby kontynuować.")
-        else:
-            with st.spinner("Przesyłam zdjęcie..."):
-                file_bytes = uploaded.read()
-                user_id = st.session_state.user["id"]
-                photo_url = db.upload_sylwetka(user_id, file_bytes)
+        if st.button("Wyślij do analizy →"):
+            if not zgoda:
+                st.warning("Zaznacz zgodę żeby kontynuować.")
+            else:
+                with st.spinner("Przesyłam zdjęcie..."):
+                    file_bytes = uploaded.read()
+                    user_id = st.session_state.user["id"]
+                    photo_url = db.upload_sylwetka(user_id, file_bytes)
 
-            with st.spinner("Tworzę analizę AI..."):
-                ankieta = st.session_state.get("ankieta", {})
-                analysis = db.create_analysis(user_id, photo_url, ankieta)
-                import base64
-                uploaded.seek(0)
-                b64_image = base64.b64encode(uploaded.read()).decode("utf-8")
-                ai_result = ai.analyze_sylwetka_b64(b64_image, ankieta)
+                with st.spinner("Tworzę analizę AI..."):
+                    ankieta = st.session_state.get("ankieta", {})
+                    analysis = db.create_analysis(user_id, photo_url, ankieta)
+                    import base64
+                    uploaded.seek(0)
+                    b64_image = base64.b64encode(uploaded.read()).decode("utf-8")
+                    ai_result = ai.analyze_sylwetka_b64(b64_image, ankieta)
 
-                if "error" in ai_result:
-                    st.error(f"Błąd analizy AI: {ai_result.get('error')}")
-                    return
+                    if "error" in ai_result:
+                        st.error(f"Błąd analizy AI: {ai_result.get('error')}")
+                        return
 
-                db.save_ai_analysis(analysis["id"], ai_result)
-                db.complete_onboarding(user_id)
+                    db.save_ai_analysis(analysis["id"], ai_result)
+                    db.complete_onboarding(user_id)
 
-            st.session_state.step = "oczekiwanie"
-            st.rerun()
+                st.session_state.step = "oczekiwanie"
+                st.rerun()
 
 # ─── KROK 3: OCZEKIWANIE ─────────────────────
 
