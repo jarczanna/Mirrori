@@ -149,14 +149,24 @@ with tab1:
 )
 
                 # Buduj korektę tylko jeśli zmieniono typ
-                def build_korekta():
-                    if not ai_json:
-                        return None
-                    if wybrany_typ != ai_typ:
-                        korekta = dict(ai_json)
-                        korekta["typ_sylwetki"] = wybrany_typ
-                        return korekta
+               def build_korekta():
+                if not ai_json:
                     return None
+                
+                nowe_reko = [r.strip() for r in reko_text.split("\n") if r.strip()]
+                nowe_unikac = [u.strip() for u in unikac_text.split("\n") if u.strip()]
+                
+                typ_zmieniony = wybrany_typ != ai_typ
+                reko_zmienione = nowe_reko != ai_reko
+                unikac_zmienione = nowe_unikac != ai_unikac
+                
+                if typ_zmieniony or reko_zmienione or unikac_zmienione:
+                    korekta = dict(ai_json)
+                    korekta["typ_sylwetki"] = wybrany_typ
+                    korekta["rekomendacje_ogolne"] = nowe_reko
+                    korekta["czego_unikac"] = nowe_unikac
+                    return korekta
+                return None
 
                 col_btn1, col_btn2 = st.columns([2, 3])
                 with col_btn1:
