@@ -22,5 +22,5 @@ with col1:
 with col2:
     st.markdown("### Jestem stylistą")
     st.markdown("Chcę przejrzeć i zatwierdzić analizy użytkowników.")
-    if st.button("Panel stylistki →", use_container_width=True):
+    if st.button("Panel stylisty →", use_container_width=True):
         st.switch_page("pages/2_stylistka.py")
