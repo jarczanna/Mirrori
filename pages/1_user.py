@@ -198,14 +198,46 @@ def step_wynik():
         prop = final.get("proporcje", {})
         st.metric("Ramiona", prop.get("ramiona", "—").replace("_", " ").title())
 
-    if final.get("rekomendacje_ogolne"):
+reko = final.get("rekomendacje_ogolne")
+    unikac = final.get("czego_unikac")
+
+    # Fallback dla starych analiz bez rekomendacji
+    if not reko or not unikac:
+        typ = final.get("typ_sylwetki", "")
+        DOMYSLNE = {
+            "A": {
+                "reko": ["Podkreślaj górną część ciała", "Bluzki z detalami przy ramionach", "Spódnice A-line"],
+                "unikac": ["Obcisłe spodnie bez balansu góry", "Wzory tylko na biodrach"]
+            },
+            "H": {
+                "reko": ["Twórz iluzję talii paskami", "Sukienki z wcięciem w talii", "Bluzki z dekoltem V"],
+                "unikac": ["Proste sukienki bez kształtu", "Oversizowe bluzy"]
+            },
+            "X": {
+                "reko": ["Podkreślaj talię", "Dopasowane kroje", "Wrap dresses"],
+                "unikac": ["Luźne workowate ubrania", "Proste kroje ukrywające sylwetkę"]
+            },
+            "V": {
+                "reko": ["Równoważ proporcje szerszymi dołami", "Spodnie palazzo", "Spódnice rozkloszowane"],
+                "unikac": ["Pagonki i szerokie ramiona", "Bluzki z dużymi detalami przy ramionach"]
+            },
+            "O": {
+                "reko": ["Pionowe linie wyszczuplają", "Dobrze skrojone marynarki", "Dekolty V wydłużają"],
+                "unikac": ["Duże wzory na brzuchu", "Zbyt obcisłe materiały"]
+            }
+        }
+        defaults = DOMYSLNE.get(typ, {"reko": [], "unikac": []})
+        reko = reko or defaults["reko"]
+        unikac = unikac or defaults["unikac"]
+
+    if reko:
         st.markdown("### Co Ci pasuje")
-        for r in final["rekomendacje_ogolne"]:
+        for r in reko:
             st.markdown(f"✓ {r}")
 
-    if final.get("czego_unikac"):
+    if unikac:
         st.markdown("### Czego unikać")
-        for u in final["czego_unikac"]:
+        for u in unikac:
             st.markdown(f"✗ {u}")
 
     if user["plan"] == "essential":
