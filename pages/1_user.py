@@ -15,7 +15,7 @@ if "step" not in st.session_state:
 # ─── HELPERS ─────────────────────────────────
 
 def show_header():
-    st.markdown("### 👗 Twoja osobista stylistka")
+    st.markdown("### 👗 Twój osobisty stylista")
     st.markdown("---")
 
 # ─── KROK 0: LOGIN / REJESTRACJA ─────────────
@@ -314,7 +314,7 @@ def step_wynik():
         st.markdown("---")
         st.markdown("### 🌟 Chcesz więcej?")
         st.markdown(
-            "W planie **Premium** stylistka co miesiąc przygotuje dla Ciebie stylizacje "
+            "W planie **Premium** stylista co miesiąc przygotuje dla Ciebie stylizacje "
             "z rzeczy które już masz w szafie — i powie Ci co założyć każdego tygodnia."
         )
         st.button("Przejdź na Premium — 89 zł/mies.")
