@@ -130,7 +130,7 @@ def step_zdjecie():
         st.image(uploaded, caption="Podgląd", width=300)
     zgoda = st.checkbox(
         "Wyrażam zgodę na przetwarzanie zdjęcia w celu analizy sylwetki. "
-        "Zdjęcie będzie dostępne dla stylistki, by umożliwić analizę."
+        "Zdjęcie będzie zapisane w bazie danych i posłuży do analizy sylwetki oraz innych usług, na które użytkownik wyraża chęć."
     )
     
     if st.button("Wyślij do analizy →"):
