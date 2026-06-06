@@ -109,8 +109,8 @@ def step_ankieta():
         }
         st.session_state.step = "zdjecie"
         st.rerun()
-
-if st.button("Wyślij do analizy →"):
+#wrzucanie zdjecia
+    if st.button("Wyślij do analizy →"):
         if not zgoda:
             st.warning("Zaznacz zgodę żeby kontynuować.")
         else:
