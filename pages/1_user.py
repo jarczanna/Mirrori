@@ -49,14 +49,14 @@ def step_ankieta():
     st.caption("Odpowiedzi pomogą stylistce lepiej Cię zrozumieć. To zajmie ok. 3 minuty.")
 
     with st.form("ankieta_form"):
-        plec = st.radio("Dla kogo szukasz stylu?", ["Kobieta", "Mężczyzna"])
-        
+        plec = st.radio("Dobieram stylizacje dla:", ["Kobiety", "Mężczyzny"])
+
         st.markdown("**Twój styl życia**")
         styl_zycia = st.multiselect(
             "Gdzie głównie nosisz ubrania?",
             ["Biuro / praca hybrydowa", "Dom i codzienność", "Wyjścia i spotkania", "Sport i aktywność", "Eleganckie okazje"]
         )
-        
+
         motywacja = st.text_area(
             "Co Cię skłoniło do szukania pomocy ze stylem?",
             placeholder="Np. po urodzeniu dziecka moje ciało się zmieniło i nie wiem co mi teraz pasuje..."
@@ -253,9 +253,12 @@ def step_wynik():
             }
         }
 
-        ankieta = analysis.get("ankieta_json") or analysis.get("ai_analysis_json", {})
-        plec = ankieta.get("plec", "Kobieta") if isinstance(ankieta, dict) else "Kobieta"
+        ankieta_data = analysis.get("ankieta_json") or {}
+        plec = ankieta_data.get("plec", "Kobieta") if isinstance(ankieta_data, dict) else "Kobieta"
         DOMYSLNE = DOMYSLNE_M if plec in ["Mężczyzna", "Mężczyzny"] else DOMYSLNE_K
+        defaults = DOMYSLNE.get(typ, {"reko": [], "unikac": []})
+        reko = reko or defaults["reko"]
+        unikac = unikac or defaults["unikac"]
 
     if reko:
         st.markdown("### Co Ci pasuje")
