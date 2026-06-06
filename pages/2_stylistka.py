@@ -94,9 +94,11 @@ with tab1:
                             st.markdown(f"**Biodra:** {prop.get('biodra', '—')}")
                             st.markdown(f"**Biodra:** {prop.get('biodra', '—')}")
 
-                        pewnosc = ai_json.get("pewnosc_typu", "—")
-                        kolor = "🟢" if pewnosc == "wysoka" else "🟡" if pewnosc == "srednia" else "🔴"
-                        st.caption(f"{kolor} Pewność analizy AI: **{pewnosc}**")
+                        if isinstance(pewnosc, (int, float)):
+                            kolor = "🟢" if pewnosc >= 60 else "🟡" if pewnosc >= 40 else "🔴"
+                            st.caption(f"{kolor} Pewność analizy AI: **{pewnosc}%**")
+                        else:
+                            st.caption(f"🔴 Pewność analizy AI: **{pewnosc}**")
 
                         if ai_json.get("uwagi"):
                             st.warning(f"⚠️ Uwagi AI: {ai_json['uwagi']}")
@@ -116,7 +118,7 @@ with tab1:
                 }
 
                 ai_typ = ai_json.get("typ_sylwetki", "A") if ai_json else "A"
-                ai_pewnosc = ai_json.get("pewnosc_typu", 0) if ai_json else 0
+                ai_pewnosc = (ai_json.get("pewnosc_typu") or ai_json.get("pewnosc_analizy", 0)) if ai_json else 0
 
                 # Znajdź domyślny wybór na podstawie wyniku AI
                 domyslny = next(
