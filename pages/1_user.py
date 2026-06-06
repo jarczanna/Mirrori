@@ -49,11 +49,14 @@ def step_ankieta():
     st.caption("Odpowiedzi pomogą stylistce lepiej Cię zrozumieć. To zajmie ok. 3 minuty.")
 
     with st.form("ankieta_form"):
+        plec = st.radio("Dla kogo szukasz stylu?", ["Kobieta", "Mężczyzna"])
+        
         st.markdown("**Twój styl życia**")
         styl_zycia = st.multiselect(
             "Gdzie głównie nosisz ubrania?",
             ["Biuro / praca hybrydowa", "Dom i codzienność", "Wyjścia i spotkania", "Sport i aktywność", "Eleganckie okazje"]
         )
+        
         motywacja = st.text_area(
             "Co Cię skłoniło do szukania pomocy ze stylem?",
             placeholder="Np. po urodzeniu dziecka moje ciało się zmieniło i nie wiem co mi teraz pasuje..."
@@ -94,6 +97,7 @@ def step_ankieta():
             return
 
         st.session_state.ankieta = {
+            "plec": plec,
             "styl_zycia": styl_zycia,
             "motywacja": motywacja,
             "styl_preferowany": styl_preferowany,
