@@ -128,12 +128,15 @@ def step_zdjecie():
 
     if uploaded:
         st.image(uploaded, caption="Podgląd", width=300)
-
-        if st.button("Wyślij do analizy →"):
-            with st.spinner("Przesyłam zdjęcie..."):
-                file_bytes = uploaded.read()
-                user_id = st.session_state.user["id"]
-                photo_url = db.upload_sylwetka(user_id, file_bytes)
+    zgoda = st.checkbox(
+        "Wyrażam zgodę na przetwarzanie zdjęcia w celu analizy sylwetki. "
+        "Zdjęcie będzie dostępne dla stylistki, by umożliwić analizę."
+    )
+    
+    if st.button("Wyślij do analizy →"):
+        if not zgoda:
+            st.warning("Zaznacz zgodę żeby kontynuować.")
+        else:
 
             with st.spinner("Tworzę analizę AI..."):
                 ankieta = st.session_state.get("ankieta", {})
