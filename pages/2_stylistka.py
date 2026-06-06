@@ -15,7 +15,7 @@ def check_auth():
         st.session_state.stylistka_auth = False
 
     if not st.session_state.stylistka_auth:
-        st.markdown("### 🪡 Panel stylistki")
+        st.markdown("### 🪡 Panel stylisty")
         password = st.text_input("Hasło", type="password")
         if st.button("Wejdź"):
             correct = os.environ.get("STYLISTKA_PASSWORD", "")
@@ -30,7 +30,7 @@ check_auth()
 
 # ─── HEADER ──────────────────────────────────
 
-st.markdown("## 🪡 Panel stylistki")
+st.markdown("## 🪡 Panel stylisty")
 st.markdown("---")
 
 tab1, tab2 = st.tabs(["📋 Kolejka do weryfikacji", "✅ Zatwierdzone"])
@@ -105,7 +105,7 @@ with tab1:
                     else:
                         st.warning("Brak analizy AI")
 
-                # Akcje stylistki
+                # Akcje stylisty
                 st.markdown("---")
                 st.markdown("**Twoja decyzja**")
 
