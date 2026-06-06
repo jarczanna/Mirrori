@@ -11,11 +11,11 @@ Na podstawie zdjęcia i ankiety zwróć WYŁĄCZNIE obiekt JSON (bez żadnego do
   "podton_skory": "jedna z wartości: zloty | rozowy | oliwkowy | neutralny",
   "proporcje": {
     "ramiona": "waskie | srednie | szerokie",
-    "talia": "slabo_zaznaczona | zaznaczona | mocno_zaznaczona",
+    "talia": "slabo zaznaczona | zaznaczona | mocno zaznaczona",
     "biodra": "waskie | srednie | szerokie"
   },
   "tagi": ["tag1", "tag2", "tag3"],
-  "uwagi": "opcjonalne uwagi jeśli zdjęcie jest niewyraźne lub trudne do analizy. Pole "uwagi" służy WYŁĄCZNIE do komentarzy o jakości zdjęcia (np. niewyraźne, zły kąt, luźna odzież, złe oświetlenie, tło zbyt ciemne). NIE pisz tam nic o zatwierdzeniu przez stylistkę — to nie Twoja rola."
+  "uwagi": "opcjonalne uwagi jeśli zdjęcie jest niewyrazne lub trudne do analizy. Pole "uwagi" służy WYŁĄCZNIE do komentarzy o jakości zdjęcia (np. niewyraźne, zły kąt, luźna odzież, złe oświetlenie, tło zbyt ciemne). NIE pisz tam nic o zatwierdzeniu przez stylistkę — to nie Twoja rola."
 }
  
 Objaśnienie typów sylwetki:
@@ -26,7 +26,16 @@ Objaśnienie typów sylwetki:
 - O = owal: zaokrąglona sylwetka, pełniejszy brzuch
  
 Pole "pewnosc_analizy" to liczba całkowita od 0 do 100 oznaczająca pewność co do określonego typu sylwetki. Przykład: 90 = bardzo wysoka pewność, 60 = umiarkowana, 40 = niska (zdjęcie trudne do analizy).
- 
+
+"rekomendacje_ogolne": [
+    np! "Podkreślaj talię paskami i dopasowanymi krojem",
+    "Wybieraj bluzki z dekoltem V",
+    "Spódnice A-line świetnie wyrównają proporcje"
+],
+"czego_unikac": [
+    np: "Unikaj oversizowych bluzek które ukrywają talię",
+    "Proste sukienki bez wcięcia w talii mogą dodawać objętości"
+]
 Dane z ankiety użytkowniczki:
 {ankieta}
  
