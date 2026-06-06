@@ -198,12 +198,14 @@ def step_wynik():
         prop = final.get("proporcje", {})
         st.metric("Ramiona", prop.get("ramiona", "—").replace("_", " ").title())
 
+  if final.get("rekomendacje_ogolne"):
     st.markdown("### Co Ci pasuje")
-    for r in final.get("rekomendacje_ogolne", []):
+    for r in final["rekomendacje_ogolne"]:
         st.markdown(f"✓ {r}")
 
+if final.get("czego_unikac"):
     st.markdown("### Czego unikać")
-    for u in final.get("czego_unikac", []):
+    for u in final["czego_unikac"]:
         st.markdown(f"✗ {u}")
 
     if user["plan"] == "essential":
