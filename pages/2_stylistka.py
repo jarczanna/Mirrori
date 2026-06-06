@@ -54,16 +54,16 @@ with tab1:
                 col_photo, col_data = st.columns([1, 2])
 
                 # Zdjęcie sylwetki
-            with col_photo:
-                photo_path = analysis.get("photo_url")
-                if photo_path:
-                    try:
-                        signed = db.get_signed_url(photo_path)
-                        st.image(signed, caption="Zdjęcie sylwetki", width=280)
-                    except Exception as e:
-                        st.error(f"Błąd: {e}")
-                else:
-                    st.warning("Brak zdjęcia")
+                with col_photo:
+                    photo_path = analysis.get("photo_url")
+                    if photo_path:
+                        try:
+                            signed = db.get_signed_url(photo_path)
+                            st.image(signed, caption="Zdjęcie sylwetki", width=280)
+                        except Exception as e:
+                            st.error(f"Błąd: {e}")
+                    else:
+                        st.warning("Brak zdjęcia")
 
                 # Dane z ankiety i analiza AI
                 with col_data:
@@ -120,7 +120,6 @@ with tab1:
                 ai_typ = ai_json.get("typ_sylwetki", "A") if ai_json else "A"
                 ai_pewnosc = (ai_json.get("pewnosc_typu") or ai_json.get("pewnosc_analizy", 0)) if ai_json else 0
 
-                # Znajdź domyślny wybór na podstawie wyniku AI
                 domyslny = next(
                     (k for k, v in TYPY_SYLWETKI.items() if v == ai_typ),
                     list(TYPY_SYLWETKI.keys())[0]
@@ -143,30 +142,48 @@ with tab1:
                 )
 
                 uzasadnienie = st.text_area(
-                "Uzasadnienie decyzji (wymagane przy korekcie)",
-                placeholder="Np. Biodra są wyraźnie szersze niż ramiona, co wskazuje na typ A, nie H...",
-                key=f"uzasadnienie_{analysis['id']}"
-)
+                    "Uzasadnienie decyzji (wymagane przy korekcie)",
+                    placeholder="Np. Biodra są wyraźnie szersze niż ramiona, co wskazuje na typ A, nie H...",
+                    key=f"uzasadnienie_{analysis['id']}"
+                )
 
-                # Buduj korektę tylko jeśli zmieniono typ
-               def build_korekta():
-                if not ai_json:
+                # Rekomendacje (edytowalne przez stylistkę)
+                st.markdown("**Rekomendacje (edytuj przed zatwierdzeniem)**")
+
+                ai_reko = ai_json.get("rekomendacje_ogolne", []) if ai_json else []
+                ai_unikac = ai_json.get("czego_unikac", []) if ai_json else []
+
+                reko_text = st.text_area(
+                    "Co pasuje (każda rekomendacja w nowej linii)",
+                    value="\n".join(ai_reko),
+                    key=f"reko_{analysis['id']}"
+                )
+
+                unikac_text = st.text_area(
+                    "Czego unikać (każda rekomendacja w nowej linii)",
+                    value="\n".join(ai_unikac),
+                    key=f"unikac_{analysis['id']}"
+                )
+
+                # Buduj korektę tylko jeśli zmieniono coś
+                def build_korekta():
+                    if not ai_json:
+                        return None
+
+                    nowe_reko = [r.strip() for r in reko_text.split("\n") if r.strip()]
+                    nowe_unikac = [u.strip() for u in unikac_text.split("\n") if u.strip()]
+
+                    typ_zmieniony = wybrany_typ != ai_typ
+                    rekomendacje_zmienione = nowe_reko != ai_reko
+                    unikac_zmienione = nowe_unikac != ai_unikac
+
+                    if typ_zmieniony or rekomendacje_zmienione or unikac_zmienione:
+                        korekta = dict(ai_json)
+                        korekta["typ_sylwetki"] = wybrany_typ
+                        korekta["rekomendacje_ogolne"] = nowe_reko
+                        korekta["czego_unikac"] = nowe_unikac
+                        return korekta
                     return None
-                
-                nowe_reko = [r.strip() for r in reko_text.split("\n") if r.strip()]
-                nowe_unikac = [u.strip() for u in unikac_text.split("\n") if u.strip()]
-                
-                typ_zmieniony = wybrany_typ != ai_typ
-                reko_zmienione = nowe_reko != ai_reko
-                unikac_zmienione = nowe_unikac != ai_unikac
-                
-                if typ_zmieniony or reko_zmienione or unikac_zmienione:
-                    korekta = dict(ai_json)
-                    korekta["typ_sylwetki"] = wybrany_typ
-                    korekta["rekomendacje_ogolne"] = nowe_reko
-                    korekta["czego_unikac"] = nowe_unikac
-                    return korekta
-                return None
 
                 col_btn1, col_btn2 = st.columns([2, 3])
                 with col_btn1:
