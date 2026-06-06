@@ -87,7 +87,7 @@ def analyze_sylwetka(photo_url: str, ankieta: dict) -> dict:
         return {"error": "Nie udało się sparsować odpowiedzi AI", "raw": raw}
 
     # Etap 2: Jeśli pewność < 60%, sięgnij po RAG
-    pewnosc = result.get("pewnosc_typu", 0)
+    pewnosc = result.get("pewnosc_typu") or result.get("pewnosc_analizy", 0)
     if pewnosc < 60:
         typ = result.get("typ_sylwetki", "H")
         cases = get_similar_cases(body_type=typ, style_tags=result.get("tagi", []))
@@ -176,7 +176,7 @@ def analyze_sylwetka_b64(image_b64: str, ankieta: dict) -> dict:
     except json.JSONDecodeError:
         return {"error": "Nie udało się sparsować odpowiedzi AI", "raw": raw}
 
-    pewnosc = result.get("pewnosc_typu", 0)
+    pewnosc = result.get("pewnosc_typu") or result.get("pewnosc_analizy", 0)
     if pewnosc < 60:
         typ = result.get("typ_sylwetki", "H")
         cases = get_similar_cases(body_type=typ, style_tags=result.get("tagi", []))
