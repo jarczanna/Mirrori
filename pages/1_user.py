@@ -208,7 +208,7 @@ def step_wynik():
 
     if not reko or not unikac:
         typ = final.get("typ_sylwetki", "")
-        DOMYSLNE = {
+        DOMYSLNE_K = {
             "A": {
                 "reko": ["Podkreślaj górną część ciała", "Bluzki z detalami przy ramionach", "Spódnice A-line"],
                 "unikac": ["Obcisłe spodnie bez balansu góry", "Wzory tylko na biodrach"]
@@ -230,9 +230,32 @@ def step_wynik():
                 "unikac": ["Duże wzory na brzuchu", "Zbyt obcisłe materiały"]
             }
         }
-        defaults = DOMYSLNE.get(typ, {"reko": [], "unikac": []})
-        reko = reko or defaults["reko"]
-        unikac = unikac or defaults["unikac"]
+        DOMYSLNE_M = {
+            "A": {
+                "reko": ["Marynarki z wyraźnymi ramionami", "Jasne koszule na górę", "Proste spodnie"],
+                "unikac": ["Obcisłe spodnie podkreślające biodra", "Duże kieszenie na biodrach"]
+            },
+            "H": {
+                "reko": ["Dobrze skrojone koszule", "Marynarki z lekkim wcięciem", "Layering — warstwy dodają kształtu"],
+                "unikac": ["Zbyt luźne ubrania bez formy", "Bardzo proste T-shirty"]
+            },
+            "X": {
+                "reko": ["Dopasowane koszule", "Dobrze skrojone garnitury", "Paski podkreślające talię"],
+                "unikac": ["Oversizowe bluzy", "Bezforemne kurtki"]
+            },
+            "V": {
+                "reko": ["Ciemne góry, jaśniejsze doły", "Proste spodnie w ciemnych kolorach", "Unikaj pagoneków"],
+                "unikac": ["Koszulki z szerokim dekoltem", "Marynarki z mocnymi ramionami"]
+            },
+            "O": {
+                "reko": ["Pionowe paski wyszczuplają", "Dobrze skrojone marynarki", "Ciemne jednolite kolory"],
+                "unikac": ["Obcisłe T-shirty", "Poziome wzory na brzuchu"]
+            }
+        }
+
+        ankieta = analysis.get("ankieta_json") or analysis.get("ai_analysis_json", {})
+        plec = ankieta.get("plec", "Kobieta") if isinstance(ankieta, dict) else "Kobieta"
+        DOMYSLNE = DOMYSLNE_M if plec in ["Mężczyzna", "Mężczyzny"] else DOMYSLNE_K
 
     if reko:
         st.markdown("### Co Ci pasuje")
