@@ -120,7 +120,7 @@ def step_zdjecie():
         "- Zdjęcie z przodu"
     )
 
-    uploaded = st.file_uploader("Wybierz zdjęcie", type=["jpg", "jpeg", "png", "webp"])
+    uploaded = st.file_uploader("Wybierz zdjęcie", type=["jpg", "jpeg", "png"])
 
     if uploaded:
         st.image(uploaded, caption="Podgląd", width=300)
@@ -198,10 +198,10 @@ def step_wynik():
         prop = final.get("proporcje", {})
         st.metric("Ramiona", prop.get("ramiona", "—").replace("_", " ").title())
 
-reko = final.get("rekomendacje_ogolne")
+    # Rekomendacje z fallbackiem dla starych analiz
+    reko = final.get("rekomendacje_ogolne")
     unikac = final.get("czego_unikac")
 
-    # Fallback dla starych analiz bez rekomendacji
     if not reko or not unikac:
         typ = final.get("typ_sylwetki", "")
         DOMYSLNE = {
