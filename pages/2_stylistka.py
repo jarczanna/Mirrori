@@ -6,7 +6,7 @@ from services import supabase_service as db
 
 load_dotenv()
 
-st.set_page_config(page_title="Panel stylistki", page_icon="🪡", layout="wide")
+st.set_page_config(page_title="Panel stylisty", page_icon="🪡", layout="wide")
 
 # ─── AUTORYZACJA ─────────────────────────────
 
