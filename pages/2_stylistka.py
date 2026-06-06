@@ -135,7 +135,7 @@ with tab1:
                 wybrany_typ = TYPY_SYLWETKI[wybrany_label]
 
                 komentarz = st.text_input(
-                    "Komentarz dla użytkowniczki (opcjonalnie)",
+                    "Komentarz dla użytkownika (opcjonalnie)",
                     placeholder="Np. Zwróć uwagę na podkreślenie talii...",
                     key=f"comment_{analysis['id']}"
                 )
